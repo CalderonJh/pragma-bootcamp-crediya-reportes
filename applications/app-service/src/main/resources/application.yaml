@@ -1,0 +1,36 @@
+server:
+  port: 8083
+spring:
+  application:
+    name: "reports"
+  h2:
+    console:
+      enabled: true
+      path: "/h2"
+  profiles:
+    include: null
+security:
+  jwt:
+    public-key-path: "${JWT_PUBLIC_KEY_PATH}"
+aws:
+  region: "us-east-1"
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "health,prometheus"
+  endpoint:
+    health:
+      probes:
+        enabled: true
+cors:
+  allowed-origins: "http://localhost:4200,http://localhost:8080"
+entrypoint:
+  sqs:
+    region: "us-east-1"
+    #endpoint: "http://localhost:4566"
+    queueUrl: "${AWS_LOAN_REPORT_SQS_QUEUE_URL}"
+    waitTimeSeconds: 20
+    maxNumberOfMessages: 10
+    visibilityTimeoutSeconds: 10
+    numberOfThreads: 1
