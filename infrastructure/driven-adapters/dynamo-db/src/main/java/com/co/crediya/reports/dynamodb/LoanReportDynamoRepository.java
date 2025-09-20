@@ -6,7 +6,6 @@ import java.math.BigDecimal;
 import java.util.logging.Logger;
 import org.reactivecommons.utils.ObjectMapper;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.reactive.TransactionalOperator;
 import reactor.core.publisher.Mono;
 import software.amazon.awssdk.enhanced.dynamodb.DynamoDbAsyncTable;
 import software.amazon.awssdk.enhanced.dynamodb.DynamoDbEnhancedAsyncClient;
@@ -14,7 +13,6 @@ import software.amazon.awssdk.enhanced.dynamodb.TableSchema;
 
 @Repository
 public class LoanReportDynamoRepository implements LoanReportRepository {
-  private final TransactionalOperator transactionalOperator;
   public static final String PARTITION_VALUE = "LOAN_REPORT";
   private final DynamoDbAsyncTable<LoanReportEntity> table;
   private final ObjectMapper mapper;
@@ -22,10 +20,8 @@ public class LoanReportDynamoRepository implements LoanReportRepository {
 
   public LoanReportDynamoRepository(
       DynamoDbEnhancedAsyncClient client,
-      TransactionalOperator transactionalOperator,
       ObjectMapper mapper) {
     this.table = client.table("active_loans", TableSchema.fromBean(LoanReportEntity.class));
-    this.transactionalOperator = transactionalOperator;
     this.mapper = mapper;
   }
 
@@ -42,7 +38,6 @@ public class LoanReportDynamoRepository implements LoanReportRepository {
   public Mono<LoanReport> updateReport(long newLoans, BigDecimal newAmount) {
     return fetchLoanReport()
         .defaultIfEmpty(new LoanReportEntity())
-        .as(transactionalOperator::transactional)
         .flatMap(
             report -> {
               report.setReportId(PARTITION_VALUE);

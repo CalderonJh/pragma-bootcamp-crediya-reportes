@@ -22,7 +22,7 @@ public class Handler {
       summary = "Obtiene reporte de cantidad de créditos y monto total",
       requestBody =
           @RequestBody(content = @Content(schema = @Schema(implementation = LoanReport.class))),
-      responses = {@ApiResponse(responseCode = "201", content = @Content())})
+      responses = {@ApiResponse(responseCode = "200", content = @Content())})
   public Mono<ServerResponse> listenGETReport() {
     return loansReportUseCase.getReport().flatMap(report -> ServerResponse.ok().bodyValue(report));
   }

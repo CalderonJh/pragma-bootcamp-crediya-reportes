@@ -9,11 +9,11 @@ spring:
       path: "/h2"
   profiles:
     include: null
-security:
-  jwt:
-    public-key-path: "${JWT_PUBLIC_KEY_PATH}"
+
 aws:
   region: "us-east-1"
+  secrets:
+    jwt-key-pair: "jwt/rsa/keys"
 management:
   endpoints:
     web:
@@ -28,7 +28,6 @@ cors:
 entrypoint:
   sqs:
     region: "us-east-1"
-    #endpoint: "http://localhost:4566"
     queueUrl: "${AWS_LOAN_REPORT_SQS_QUEUE_URL}"
     waitTimeSeconds: 20
     maxNumberOfMessages: 10

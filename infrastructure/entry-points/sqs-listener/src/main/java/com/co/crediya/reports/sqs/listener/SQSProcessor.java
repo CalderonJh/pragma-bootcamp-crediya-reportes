@@ -9,7 +9,6 @@ import java.util.function.Function;
 import java.util.logging.Logger;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.reactive.TransactionalOperator;
 import reactor.core.publisher.Mono;
 import software.amazon.awssdk.services.sqs.model.Message;
 
@@ -19,7 +18,6 @@ public class SQSProcessor implements Function<Message, Mono<Void>> {
   private final LoansReportUseCase loansReportUseCase;
   private static final Logger logger = Logger.getLogger(SQSProcessor.class.getName());
   private final ObjectMapper objectMapper;
-  private final TransactionalOperator transactionalOperator;
 
   @Override
   public Mono<Void> apply(Message message) {

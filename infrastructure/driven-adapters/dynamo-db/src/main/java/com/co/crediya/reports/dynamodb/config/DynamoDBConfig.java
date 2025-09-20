@@ -1,19 +1,23 @@
 package com.co.crediya.reports.dynamodb.config;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import software.amazon.awssdk.auth.credentials.DefaultCredentialsProvider;
 import software.amazon.awssdk.enhanced.dynamodb.DynamoDbEnhancedAsyncClient;
+import software.amazon.awssdk.metrics.MetricPublisher;
 import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.dynamodb.DynamoDbAsyncClient;
 
 @Configuration
 public class DynamoDBConfig {
   @Bean
-  public DynamoDbAsyncClient dynamoDbAsyncClient() {
+  public DynamoDbAsyncClient amazonDynamoDBAsync(
+      MetricPublisher publisher, @Value("${aws.region}") String region) {
     return DynamoDbAsyncClient.builder()
-        .region(Region.US_EAST_1)
-        .credentialsProvider(DefaultCredentialsProvider.builder().build())
+        .credentialsProvider(DefaultCredentialsProvider.create())
+        .region(Region.of(region))
+        .overrideConfiguration(o -> o.addMetricPublisher(publisher))
         .build();
   }
 
