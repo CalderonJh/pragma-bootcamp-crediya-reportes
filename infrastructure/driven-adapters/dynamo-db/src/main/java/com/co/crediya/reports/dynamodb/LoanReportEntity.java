@@ -2,11 +2,13 @@ package com.co.crediya.reports.dynamodb;
 
 import java.math.BigDecimal;
 import lombok.Setter;
+import lombok.ToString;
 import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbAttribute;
 import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbBean;
 import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbPartitionKey;
 
 @Setter
+@ToString
 @DynamoDbBean
 public class LoanReportEntity {
   private String reportId;
